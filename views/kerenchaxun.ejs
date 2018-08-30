@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>汽车租赁系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link href="/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">汽车租赁管理系统</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/kerenchaxun">客人查询</a></li>
+                    <li><a href="/zulindengji">租赁登记</a></li>
+                    <li><a href="/guihuandengji">归还登记</a></li>
+                    <li><a href="/tongjifenxi">统计分析</a></li>
+                    <li><a href="/leibiedangan">类别档案</a></li>
+                    <li><a href="/qichedangan">汽车档案</a></li>
+                    <li><a href="/tuichu">退出系统</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container" style="margin-top: 80px">
+        <a href="/kerenchaxunadd"><button type="button" class="btn btn-primary" id="add">添加</button></a>
+
+        <table class="table  table-striped">
+            <thead>
+                <tr>
+                    <th>编号</th>
+                    <th>姓名</th>
+                    <th>电话</th>
+                    <th>住址</th>
+                    <th>身份证</th>
+                    <th>驾照</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+        <div id="pagenavbox"></div>
+    </div>
+
+    <script type="text/javascript" src="/js/jquery-1.12.3.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/PageNav.js"></script>
+    <script type="text/javascript">
+        //事件委托，事件委托是制作动态事件绑定最简单的方法
+        //删除按钮
+        $("#tbody").delegate(".delbtn","click",function(){
+            if(!confirm("真的要删除么")){
+                return;
+            }
+
+            var sid = $(this).attr("data-sid");
+            var $this = $(this);
+
+            $.ajax({
+                url : "/kerenchaxun/" + sid,
+                type : "delete",
+                success : function(data){
+                    if(data.result == 1){
+                        alert("删除成功");
+                        $this.parents("tr").remove();
+                        window.location = "/kerenchaxun";
+                    }else{
+                        alert("服务器错误！");
+                    }
+                }
+            });
+        });
+
+
+        //修改按钮
+        $("#tbody").delegate(".modbtn","click",function(){
+            var sid = $(this).attr("data-sid");
+            window.location = "/kerenchaxun/" + sid;
+        });
+
+
+        $.get("/kerenchaxunall?page=1",function(data){
+            //分页条
+            new PageNav({
+                boxid : "pagenavbox",
+                page : 1,
+                pageAmount : data.pageAmount,
+                change : function(pagenumber){
+                    gotopage(pagenumber);
+                }
+            });
+
+            gotopage(1);
+        });
+        //Ajax请求，请求JSON数据
+        function gotopage(pagenumber){
+            //清空
+            $("#tbody").empty();
+            //获得新的数据
+            $.get("/kerenchaxunall?page=" + pagenumber,function(data){
+                $.each(data.results,function(i, n){
+                    //创建一个tr标签
+                    $tr = $("<tr></tr>");
+                    $("<td></td>").html(n.sid).appendTo($tr);
+                    $("<td></td>").html(n.yonghuming).appendTo($tr);
+                    $("<td></td>").html(n.dianhua).appendTo($tr);
+                    $("<td></td>").html(n.dizhi).appendTo($tr);
+                    $("<td></td>").html(n.shenfengzheng).appendTo($tr);
+                    $("<td></td>").html(n.jiazhao).appendTo($tr);
+                    $("<td><input type='button' class='btn btn-danger delbtn' value='删除' data-sid='" + n.sid +"'/> " +
+                        "<input type='button' class='btn btn-warning modbtn' value='修改' data-sid='" + n.sid + "'/></td>").appendTo($tr);
+                    //上树
+                    $tr.appendTo($("#tbody"));
+                });
+            });
+        }
+    </script>
+</body>
+</html>

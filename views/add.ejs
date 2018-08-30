@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>汽车租赁系统</title>
+    <link href="/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME ICONS  -->
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE  -->
+    <!--<link href="/css/style.css" rel="stylesheet" />-->
+    <style type="text/css">
+        .alert{
+            padding: 0 15px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">汽车租赁管理系统</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/kerenchaxun">客人查询</a></li>
+                <li><a href="/zulindengji">租赁登记</a></li>
+                <li><a href="/guihuandengji">归还登记</a></li>
+                <li><a href="/tongjifenxi">统计分析</a></li>
+                <li><a href="/leibiedangan">类别档案</a></li>
+                <li><a href="/qichedangan">汽车档案</a></li>
+                <li><a href="/tuichu">退出系统</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+    <!-- MENU SECTION END-->
+    <div class="content-wrapper" style="margin-top: 80px;">
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-head-line">增加用户</h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>
+                            编号：
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>
+                            <input type="text" class="form-control" name="sid">
+                        </p>
+                        <div class="alert alert-danger" role="alert" id="sid_tip" style="display:none;">学号已经存在，请检查！</div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>
+                            姓名：
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>
+                            <input type="text" class="form-control" name="yonghuming">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>
+                            电话：
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>
+                            <input type="text" class="form-control" name="dianhua">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>
+                            地址：
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>
+                            <input type="text" class="form-control" name="dizhi">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>
+                            身份证：
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>
+                            <input type="text" class="form-control" name="shenfengzheng">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>
+                            驾照：
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <p>
+                            <input type="text" class="form-control" name="jiazhao">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+
+                    </div>
+                    <div class="col-md-5">
+                        <button class="btn btn-success" id="btn">提交</button>
+                    </div>
+                </div>
+        </div>
+        <!--  end  Context Classes  --> </div>
+</div>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript">
+    //点击提交按钮的时候做的事情
+    $("#btn").click(function(){
+        $.post("/dokerenchaxun",{
+            sid : parseInt($("input[name=sid]").val()),
+            yonghuming : $("input[name=yonghuming]").val(),
+            dianhua : parseInt($("input[name=dianhua]").val()),
+            dizhi : $("input[name=dizhi]").val(),
+            shenfengzheng : $("input[name=shenfengzheng]").val(),
+            jiazhao : $("input[name=jiazhao]").val(),
+        },function(data){
+            if(data.result == 1){
+                window.location = "/kerenchaxun";
+            }
+        })
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>汽车租赁系统</title>
+    <style>
+        li{
+            margin-bottom: 15px;
+        }
+    </style>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- FONT AWESOME ICONS  -->
+    <link href="/css/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE  -->
+    <link href="/css/style.css" rel="stylesheet" />
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">汽车租赁管理系统</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/kerenchaxun">客人查询</a></li>
+                <li><a href="/zulindengji">租赁登记</a></li>
+                <li><a href="/guihuandengji">归还登记</a></li>
+                <li><a href="/tongjifenxi">统计分析</a></li>
+                <li class="active"><a href="/leibiedangan">类别档案</a></li>
+                <li><a href="/qichedangan">汽车档案</a></li>
+                <li><a href="/tuichu">退出系统</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+    <div class="content-wrapper" style="margin-top: 80px">
+        <div class="container">
+            <h1>类别档案实现</h1>
+            <div class="row" style="margin-bottom: 10px">
+                <div class="col-md-12">
+                    <!-- Large modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">增加</button>
+                    <!--开始模态框-->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">增加学生</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/student">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <p>
+                                                        学号：
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>
+                                                        <input type="text" class="form-control" name="sid">
+                                                    </p>
+                                                    <div class="alert alert-danger" role="alert" id="sid_tip" style="display:none;">学号已经存在，请检查！</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <p>
+                                                        姓名：
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>
+                                                        <input type="text" class="form-control" name="name">
+                                                    </p>
+                                                </div>
+                                            </div>
+
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="btn">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="del" class="btn btn-primary" >删除</button>
+                    <button type="button">返回</button>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!--   Basic Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>行号</th>
+                                            <th>类别名称</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody"></tbody>
+                                </table>
+                            </div>
+
+                            <div id="pagenavbox"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/PageNav.js"></script>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+    // <!--增加按钮-->
+      $("#btn").click(function () {
+          $.post("/leibiedengji",{
+              id : parseInt($("input[name=sid]").val()),
+              name : $("input[name=name]").val(),
+          },function(data){
+              if(data.result == 1){
+                  alert("提交成功！");
+                  $("input[type=text]").val("");
+                  window.location.href="/leibiedangan";
+              }else if(data.result == -1){
+                  alert("提交失败，学号被占用！");
+              }else if(data.result == -2){
+                  alert("服务器错误！请联系管理员，怎么联系我也不知道！");
+              }
+          })
+      })
+    //删除按钮
+    $("#tbody").delegate("#check","click",function(){
+        var id = $(this).attr("data-sid");
+        // console.log(sid);
+        $("#del").click(function () {
+                $.ajax({
+                    url : "/leibiedengji/" + id,
+                    type : "delete",
+                    success : function(data){
+                        if(data.result == 1){
+                            alert("删除成功");
+                            window.location.href="/leibiedangan";
+                            $this.parents("tr").remove();
+                        }else{
+                            alert("服务器错误！");
+                        }
+                    }
+                });
+
+
+        })
+
+    });
+
+    //请求一次，创建分页条
+    $.get("/leibiedengjiall?page=1",function(data){
+        //分页条
+        new PageNav({
+            boxid : "pagenavbox",
+            page : 1,
+            pageAmount : data.pageAmount,
+            change : function(pagenumber){
+                gotopage(pagenumber);
+            }
+        });
+
+        gotopage(1);
+    });
+    //Ajax请求，请求JSON数据
+    function gotopage(pagenumber){
+        //清空
+        $("#tbody").empty();
+
+        //获得新的数据
+        $.get("/leibiedengjiall?page=" + pagenumber,function(data){
+            $.each(data.results,function(i, n){
+                // console.log(n);
+                //创建一个tr标签
+                $tr = $("<tr></tr>");
+                $("<td><input type='radio' id='check'  data-sid='" + n.id +"' name='cicici'/></td>").appendTo($tr);
+                $("<td></td>").html(n.id).appendTo($tr);
+                $("<td></td>").html(n.name).appendTo($tr);
+                // $("<td><input type='button' class='btn btn-danger delbtn' value='删除' data-sid='" + n.sid +"'/> <input type='button' class='btn btn-warning modbtn' value='修改' data-sid='" + n.sid + "'/></td>").appendTo($tr);
+                //上树
+                $tr.appendTo($("#tbody"));
+            });
+        });
+    }
+</script>
+
+</body>
+</html>

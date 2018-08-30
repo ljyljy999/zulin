@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>汽车租赁系统</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <style>
+        html,body{
+            width:100%;
+            height: 100%;
+        }
+        body{
+          padding-top:80px;
+            background: url("/images/bg.jpg");
+        }
+        .container p{
+            padding:10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3" >
+                <form>
+                    <h2 class="form-signin-heading">汽车租赁管理系统--用户登录</h2>
+                    <p>
+                        用户名：<input type="text"name="yonghuming" class="form-control" required id="yonghuming">
+                    </p>
+                    <p>
+                       密码： <input type="password" name="mima" class="form-control"  required>
+                    </p>
+                   <p>
+                       <button class="btn btn-lg btn-primary btn-block" type="button" id="loginBtn">登录</button>
+                   </p>
+                </form>
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+    <script src="/js/jquery-1.12.3.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+        $('#loginBtn').click(function () {
+            var str = $('form').serialize();
+            $.post('/login',str,function (data) {
+                if(data.result == 1){
+                    alert('登录成功')
+                    window.location = '/kerenchaxun'
+                }
+            })
+        })
+    </script>
+</body>
+</html>
